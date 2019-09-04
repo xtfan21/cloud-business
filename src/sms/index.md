@@ -37,7 +37,8 @@ subtitle: 短信编辑器
 通过`ref`去获取所需要的数据方法`getOuterData`
 
 ### 字段说明
-| 字段 | 说明 |
+| 字段 | 说明 |  
+| --- | --- |
 | editorText | 编辑器文本 |
 | previewText | 预览文本  |
 | totalChars | 总字数 |
