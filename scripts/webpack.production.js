@@ -7,18 +7,19 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 // 生成入口文件
-const filePath = path.resolve(__dirname, '../src/components');
+const filePath = path.resolve(__dirname, '../src');
 const files = fs.readdirSync(filePath);
 const ignores = ['.DS_Store', 'index.js'];
 const entry = {
-	'index': './src/components/index.js'
+	'index': './src/index.js'
 };
 files.forEach(name => {
 	if (ignores.includes(name)) {
 		return;
 	}
-	entry[name] = `./src/components/${name}/index.js`;
+	entry[name] = `./src/${name}/index.js`;
 });
+
 
 const buildOutputDir = path.join(__dirname, '../dist');
 
@@ -31,7 +32,8 @@ module.exports = () => ({
 	},
 	externals: {
 		'react': 'react',
-		'react-dom': 'react-dom'
+		'react-dom': 'react-dom',
+		libraryTarget: 'umd'
 	},
 	optimization: {
 		minimizer: [
@@ -50,7 +52,7 @@ module.exports = () => ({
 				assetNameRegExp: /\.css$/g,
 				cssProcessor: require('cssnano'),
 				cssProcessorOptions: {
-					discardComments: {removeAll: true},
+					discardComments: { removeAll: true },
 					minifyGradients: true
 				},
 				canPrint: true
@@ -64,8 +66,8 @@ module.exports = () => ({
 			chunkFilename: '[name].[hash:20].css'
 		}),
 		new CopyWebpackPlugin([
-			{from: path.join(__dirname, '../package.json'), to: '', toType: 'file'},
-			{from: path.join(__dirname, '../README.md'), to: '', toType: 'file'}
+			{ from: path.join(__dirname, '../package.json'), to: '', toType: 'file' },
+			{ from: path.join(__dirname, '../README.md'), to: '', toType: 'file' }
 		])
 	]
 });
