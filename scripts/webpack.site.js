@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-const buildOutputDir = path.join(__dirname, '../cloud-react-site');
+const buildOutputDir = path.join(__dirname, '../cloud-business-react-site');
 
 const publicPath = '/';
 
