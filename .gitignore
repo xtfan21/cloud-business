@@ -25,3 +25,7 @@ yarn-error.log*
 
 # webpack default dist folder
 dist/
+cloud-business-react-site/*
+
+# generate index file
+src/index.js
