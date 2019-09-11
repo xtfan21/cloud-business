@@ -1,0 +1,55 @@
+.goods-form {
+    display: flex;
+    flex-flow: row wrap;
+    // justify-content: space-between;
+    align-content: flex-start;
+    align-items: center;
+
+    .goods-form-item {
+        line-height: 32px;
+        padding: 5px 0;
+        display: flex;
+        justify-content: flex-start;
+        align-content: flex-start;
+
+        .select {
+            width: 150px;
+        }
+        .select-wrapper {
+            line-height: 18px;
+            background-color: #fff;
+        }
+
+        .goods-form-item-label {
+            display: inline-block;
+            width: 98px;
+            text-align: right;
+        }
+        .goods-form-item-input {
+            width: 150px;
+        }
+        .goods-form-item-range {
+            width: 72px;
+        }
+        .goods-form-item-dropdown{
+            background: #fff;
+            width: 150px;
+        }
+    }
+    .operator-area {
+        width: 205px;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding-left: 20px;
+        .search-mode {
+            cursor: pointer;
+            color: #0083ba;
+        }
+        .search-reset {
+            margin-left: 20px;
+            cursor: pointer;
+        }
+    }
+}
