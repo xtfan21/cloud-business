@@ -1,12 +1,11 @@
 ---
 title: 基础用法
 desc: 短信编辑器
-order: 1
 ---
 
 ````javascript
 import React from 'react';
-import Sms from 'cloud-business/sms';
+import SmsEditor from 'cloud-business/sms-editor';
 import { Button } from 'cloud-react';
 
 export default class SmsDemo extends React.Component {
@@ -156,9 +155,9 @@ export default class SmsDemo extends React.Component {
 		});
 	}
 
-	handleContentChange = (text) => {
+	handleContentChange = data => {
 		this.setState({
-			content: text
+			content: data.editorText
 		});
 	}
 
@@ -173,7 +172,7 @@ export default class SmsDemo extends React.Component {
 		return (
 			<div className="wrapper">
 
-				<Sms ref={this.smsRef}
+				<SmsEditor ref={this.smsRef}
 					 disabled={disabled}
 					 content={content}
 					 keywords={keywords}
@@ -195,7 +194,7 @@ export default class SmsDemo extends React.Component {
 						</select>
 					</div>
 
-					<Sms.Editor />
+					<SmsEditor.Editor />
 
 					<div className="item">
 						<label>自定义签名：</label>
@@ -225,9 +224,9 @@ export default class SmsDemo extends React.Component {
 					</div>
 
 					<div className="sms-preview">
-						<Sms.Preview />
+						<SmsEditor.Preview />
 					</div>
-				</Sms>
+				</SmsEditor>
 			</div>
 		);
 	}

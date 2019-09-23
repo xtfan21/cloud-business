@@ -62,7 +62,6 @@ class Sms extends Component {
 		this.resolveContent();
 	}
 
-
 	componentDidUpdate(prevProps) {
 
 		const { useUnsubscribe, customSignature, unsubscribeText, gateway } = this.props;

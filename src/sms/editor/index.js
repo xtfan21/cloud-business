@@ -9,7 +9,7 @@ import Keyword from './keyword';
 import Tips from './tip';
 import SmsContext from '../SmsContext';
 
-import './index.less';
+// import './index.less';
 
 class Editor extends Component {
 
