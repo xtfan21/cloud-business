@@ -27,13 +27,13 @@ module.exports = () => ({
 	devtool: 'none',
 	entry,
 	output: {
-		filename: '[name].js',
+        filename: '[name].js',
+        libraryTarget: 'umd',
 		path: buildOutputDir
 	},
 	externals: {
 		'react': 'react',
-		'react-dom': 'react-dom',
-		libraryTarget: 'umd'
+		'react-dom': 'react-dom'
 	},
 	optimization: {
 		minimizer: [
