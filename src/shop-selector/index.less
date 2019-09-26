@@ -1,0 +1,113 @@
+.shop-selector {
+	width: 996px !important;
+	height: 490px;
+	display: flex;
+	flex-flow: column nowrap;
+	margin-bottom: -19px;
+	font-size: 12px;
+	color: #666;
+
+	.shop-selector-panel {
+		flex: 1;
+		display: flex;
+		position: relative;
+		flex-flow: column nowrap;
+
+		.all-shops-area {
+			display: flex;
+			.all-shops-operation {
+				color: #0083ba;
+				margin-bottom: 8px;
+			}
+			.tree-area {
+				min-width: 200px;
+				height: 380px;
+				padding-bottom: 10px;
+				margin-right: 10px;
+				overflow-y: auto;
+				padding-top: 10px;
+				background: #f5f5f5;
+
+				.tree-list {
+					width: 100%;
+					min-width: 0;
+					.icon-openFolder-solid, .icon-folder-solid {
+						color: #90b9d2;
+					}
+				}
+			}
+			.table-wrap .table-div table[grid-manager] thead > tr th[align][align=center] {
+				&:first-child {
+					visibility: hidden;
+				}
+
+			}
+			.table-wrap .table-div table[grid-manager] tbody td {
+				.disabled-row {
+					color: red;
+				}
+			}
+
+			.all-shops-List {
+				width: calc(100% - 200px);
+			}
+		}
+		.footer-toolbar {
+			.totals-count, .refresh-action {
+				display: none;
+			}
+			.table-footer-tips {
+				display: inline-block;
+				background: #eff7ff;
+				border: 1px solid #cde5ff;
+				border-radius: 2px;
+				height: 22px;
+				line-height: 21px;
+				color: #0083ba;
+				padding: 0 10px;
+			}
+		}
+
+
+		.selected-operation {
+			margin-bottom: 5px;
+			.remove {
+				color: #0083ba;
+				cursor: pointer;
+			}
+			.remove-page {
+				margin-left: 15px;
+			}
+		}
+
+		.selected-num {
+			position: absolute;
+			top: -46px;
+			left: 178px;
+			width: 26px;
+			height: 14px;
+			line-height: 14px;
+			text-align: center;
+			border-radius: 2px;
+			background: #F23C3C;
+			color: white;
+			font-size: 10px !important
+		}
+	}
+
+
+	.check-all-selected {
+		margin-right: 10px;
+		margin-left: 13px;
+	}
+
+	.checked-inner-after, .checkbox.checkbox-checked .checkbox-inner::after {
+		width: 40%;
+		height: 70%;
+	}
+	.row-remove {
+		color: #0083ba;
+		cursor: pointer;
+	}
+}
+

@@ -9,5 +9,9 @@ export { default as AreaSelector } from './area-selector';
 
 export { default as CcMenu } from './cc-menu';
 
+export { default as GoodsSelector } from './goods-selector';
+
+export { default as ShopSelector } from './shop-selector';
+
 export { default as Sms } from './sms';
 
