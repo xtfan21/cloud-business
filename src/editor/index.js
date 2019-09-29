@@ -112,19 +112,48 @@ class Editor extends Component {
 
 		this.props.onContentChanged({ variableNumber });
 
-	}
+    }
+    
+    // 计算内容包含的变量预估字数
+    setVariableWordsNumber = varibaleNames => {
+        
+        const { keywords } = this.props;
+
+        let variableWordsNumber = 0;
+
+        varibaleNames.map(name => {
+
+            const result = keywords.find(keyword => keyword.name === name);
+
+            variableWordsNumber += result.wordCount ? result.wordCount : 0;
+
+            return null;
+
+        });
+
+        this.props.onContentChanged({ variableWordsNumber })
+
+    }
 
 	setEditorText = text => {
 
 		const { isTrimSpace, keywords } = this.props;
-		const inputReg = getVariableReg();
+        const inputReg = getVariableReg();
+        // 内容变量 name 集合
+        const varibaleNames = [];
 
 		let data = text
 			.replace(inputReg, (result, $1, $2) => {
+                
+                // 编辑器中显示需要 text，但是给到后端解析需要使用 name 字段
+                const name = keywordTextNameConvert($2, true, keywords);
+                varibaleNames.push(name);
+
 				if ($1 === DEFAULT_TYPE_NAME) {
-					return `${KEYWORD_SIGN}_${keywordTextNameConvert($2, true, keywords)}_${KEYWORD_SIGN}`;
+					return `${KEYWORD_SIGN}_${name}_${KEYWORD_SIGN}`;
 				}
-				return `${KEYWORD_SIGN}_[${$1}]${keywordTextNameConvert($2, true, keywords)}_${KEYWORD_SIGN}`;
+                return `${KEYWORD_SIGN}_[${$1}]${name}_${KEYWORD_SIGN}`;
+                
 			})
 			.replace(/<[^>]+>/g, '')
 			.replace(/(&nbsp;)|(&lt;)|(&gt;)|(&amp;)/g, result => {
@@ -137,13 +166,14 @@ class Editor extends Component {
 
 		this.setState({
 			editorText: data
-		});
-
+        });
+        
 		this.props.onContentChanged({ editorText: data });
 
 		this.setTotalChars(data);
 		this.setNewLineNumber(data);
-		this.setVariableNumber(data);
+        this.setVariableNumber(data);
+        this.setVariableWordsNumber(varibaleNames);
 	};
 
 	setPreviewText = text => {
@@ -158,7 +188,8 @@ class Editor extends Component {
 			});
 
 		const content = convertContent(this.tempRef.current.textContent, isTrimSpace);
-		let preview = content;	
+        
+        let preview = content;	
 
 		if (hasTagInPreview) {
 			// 关键字高亮, URL, 手机及固话号码下划线
@@ -175,9 +206,15 @@ class Editor extends Component {
 						.replace(/(\D)((?:[08][1-9]\d{1,2}-?)?[2-9]\d{6,7})(\D)/g, (match, p1, p2, p3) => {
 							return `${p1}<a href="javascript: void(0);">${p2}</a>${p3}`;
 						});
-		}
+        } else {
+            // 输出普通文本的时候需要将解析的变量剔除
+            preview = content
+                        .replace(/œ([^œ]+)œ/g, (result, $1) => {
+                            return $1.trim();
+                        });
+        }
 
-		const previews = preview.split(NEW_LINE) || [];
+        const previews = preview.split(NEW_LINE) || [];
 
 		this.setState({ previewText: previews });
 

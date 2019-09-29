@@ -27,7 +27,8 @@ export default class EditorDemo extends React.Component {
 		{
 			type: 'taobao',
 			name: 'XMTB',
-			text: '姓名淘宝',
+            text: '姓名淘宝',
+            wordCount: 4,
 			defaultValue: '西凉少女Ash'
 		},
 		{
@@ -45,7 +46,8 @@ export default class EditorDemo extends React.Component {
 		},
 		{
 			type: 'taobao',
-			name: 'shortlink',
+            name: 'shortlink',
+            wordCount: 16,
 			text: '同城关怀_2018-08-07',
 			defaultValue: 'c.tb.cn/c.0zYeW#'
 		},
@@ -91,14 +93,20 @@ export default class EditorDemo extends React.Component {
 		});
 	}
 
-	handleContentChange = ({editorText, previewText}) => {
+	handleContentChange = data => {
+        
+        console.log(data);
+
+        const { editorText, previewText } = data;
+
 		if (editorText) {
 			this.setState({editorText});
 		}
 
 		if (previewText) {
 			this.setState({previewText});
-		}
+        }
+        
 	}
 
 	render() {

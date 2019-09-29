@@ -32,6 +32,8 @@ subtitle: 内容编辑器
     // 换行数
     newLineNumber: 2,
     // 变量数
-    variableNumber: 1
+    variableNumber: 1,
+    // 变量预估字数
+    variableWordsNumber: 20
 }
 ```
