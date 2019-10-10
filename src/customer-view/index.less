@@ -1,0 +1,348 @@
+/**
+ * index.less
+ * wangbo
+ * 2019/10/8
+ */
+@part-line: 1px dashed #DADADA;
+@display: inline-block;
+@label-info-width: 194px;
+@customer-area-width: 980px;
+@height: 26px;
+@tips-color: #999;
+
+.modal-body {
+    padding-top: 10px;
+}
+.customer-view-area {
+    width: 1080px;
+    font-size: 12px;
+    .hideLabel {
+        display: none;
+    }
+}
+.account-area {
+    .customer-info {
+        padding-top: 12px;
+        border-bottom: none !important;
+        > span {
+            display: @display;
+            height: @height;
+            min-width: @label-info-width;
+            padding-bottom: 12px;
+            .edit-input {
+                display: @display;
+                width: 100px;
+                height: @height;
+                vertical-align: middle;
+                .select-wrapper {
+                    height: inherit;
+                    background: white;
+                }
+            }
+            > label {
+                display: inherit;
+                height: @height;
+                vertical-align: middle;
+                line-height: @height;
+            }
+            > span {
+                display: inherit;
+                max-width: 110px;
+                height: @height;
+                line-height: 26px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                vertical-align: bottom;
+            }
+            .address-label {
+                max-width: 650px;
+            }
+        }
+        .edit-icon-area {
+            display: @display;
+            cursor: pointer;
+            padding: 0 8px;
+            line-height: 14px;
+            .customer-item-info {
+                display: @display;
+                height: @height;
+                line-height: @height;
+                vertical-align: middle;
+            }
+            .edit-icon {
+                font-size: 14px;
+                color: @tips-color;
+                vertical-align: middle;
+                &:first-child {
+                    margin-right: 4px;
+                }
+            }
+            .save-icon {
+                color: #52c41a;
+            }
+        }
+    }
+    .mouse-enter {
+        background: #eef8fc;
+    }
+    .customer-account-info {
+        width: @customer-area-width;
+        display: @display;
+        vertical-align: top;
+        .account-info-area {
+            width: inherit;
+            display: @display;
+            border-bottom: @part-line;
+            .hideLabel {
+                display: none;
+            }
+            &-label > label, .uniId-label {
+                display: @display;
+                width: @label-info-width;
+                padding-bottom: 12px;
+                .account-name {
+                    display: @display;
+                    max-width: 100px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    vertical-align: bottom;
+                }
+            }
+        }
+    }
+    .avatar {
+        display: @display;
+        width: 80px;
+        height: 80px;
+        border: 1px solid #e4e4e4;
+        border-radius: 4px;
+        vertical-align: 14px;
+        margin-right: 10px;
+    }
+    .default-avatar {
+        background: url("./assets/img/unknown.png");
+    }
+    .f-avatar {
+        background: url("./assets/img/female.png");
+    }
+    .m-avatar {
+        background: url("./assets/img/male.png");
+    }
+
+    .consumption-area {
+        border-top: @part-line;
+        > ul {
+            display: @display;
+            width: 33.3%;
+            padding: 0;
+            li {
+                list-style: none;
+                padding-bottom: 12px;
+                &:last-child {
+                    padding-bottom: 8px;
+                }
+                > span:last-child {
+                    display: inline-block;
+                    max-width: 240px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    vertical-align: top;
+                }
+            }
+        }
+    }
+}
+
+.grid-area {
+    .customer-address-area {
+        padding-top: 10px;
+    }
+    .customer-label-area {
+        .marked-tag-area {
+            border-bottom: 1px dashed #DADADA;
+            ul {
+                padding: 0 0 7px 0;
+                margin: 0;
+                li {
+                    display: @display;
+                    max-width: 960px;
+                    height: 12px;
+                    line-height: 12px;
+                    position: relative;
+                    border-radius: 2px;
+                    color: #3A3A3A;
+                    padding: 5px;
+                    margin-right: 5px;
+                    margin-bottom: 5px;
+                    border: 1px solid #CCDCEB;
+                    background: #EFF7FF;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    vertical-align: middle;
+                }
+                .tag-type-label {
+                    border: none;
+                    background: none;
+                    margin-right: 0;
+                }
+                .cloud-tag-item {
+                    padding-right: 5px;
+                    cursor: default;
+                    background: none;
+                }
+                .add-tag {
+                    cursor: pointer;
+                    color: #0097d7;
+                    .shuyunicon {
+                        font-size: 12px;
+                        color: #0097d7;
+                        vertical-align: middle;
+                        margin-right: 4px;
+                    }
+                }
+                .define-tag-item {
+                    height: 22px;
+                    background: #EFF7FF;
+                    color: #666666;
+                    padding: 0;
+                    cursor: pointer !important;
+
+                    .define-tag-name {
+                        line-height: 22px;
+                        padding: 0 5px;
+                        display: @display;
+                        vertical-align: bottom;
+                        &:hover {
+                            color: #0083BA;
+                        }
+                    }
+
+                    .icon-close {
+                        display: inline-block;
+                        height: 22px;
+                        width: 18px;
+                        color: #cecece;
+                        line-height: 22px;
+                        padding-left: 2px;
+                        border-left: 1px solid #ccdceb;
+                    }
+                }
+            }
+        }
+        .rfm-tag-area {
+
+        }
+    }
+    .customer-benefit-area, .customer-interactive-area, .customer-marketing-area, .customer-order-area{
+        .title-label-tips {
+            padding: 8px 0 20px;
+            color: #3d3d3d;
+            .empty {
+                color: @tips-color;
+            }
+            .title-count {
+                padding-right: 24px;
+            }
+            .select {
+                display: @display;
+                vertical-align: middle;
+                width: 250px;
+                background: white;
+                margin-right: 20px;
+            }
+        }
+        .order-list {
+            padding: 12px;
+            cursor: default;
+            .order-item {
+                min-height: 70px;
+            }
+            .product-name {
+                display: @display;
+                width: 260px;
+                vertical-align: top;
+                margin-left: 10px;
+                > a {
+                    text-decoration: none;
+                    color: #0083ba;
+                    white-space: normal;
+                    word-break: break-all;
+                    text-overflow: ellipsis;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -moz-box-orient: vertical;
+                    -webkit-line-clamp: 2;
+                    overflow: hidden;
+                    &:hover {
+                        color: #0083ba;
+                    }
+                }
+                > p {
+                    margin: 0;
+                    .sku {
+                        color: @tips-color;
+                    }
+                    .product-refund {
+                        float: right;
+                        color: #FF8D1A;
+                    }
+
+                }
+            }
+            .rate-area {
+                display: @display;
+                width: 720px;
+                vertical-align: top;
+                line-height: 20px;
+                white-space: normal;
+                > div {
+                    padding-bottom: 10px;
+                    word-break: break-all;
+                }
+                .rate-time {
+                    color: #666;
+                    margin-right: 10px;
+                }
+                .rate-replay {
+                    color: #E99100;
+                }
+            }
+            .default-img {
+                display: @display;
+                width: 70px;
+                height: 70px;
+                color: @tips-color;
+                background: #EBEBEB;
+                padding: 20px;
+                line-height: 16px;
+                letter-spacing: 3px;
+                white-space: normal;
+            }
+            .order-state-info {
+                float: right;
+                > span {
+                    margin-left: 40px;
+                    &:last-child {
+                        padding-right: 20px;
+                    }
+                }
+            }
+        }
+        .order-list-price > .order-price{
+            height: 80px;
+            border-bottom: 1px solid #eee;
+            line-height: 80px;
+            margin-left: -4px;
+        }
+    }
+    .tips-label {
+        text-align: right;
+        color: @tips-color;
+        line-height: 20px;
+        padding: 12px 23px 0 0;
+    }
+}
