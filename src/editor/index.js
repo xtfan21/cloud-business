@@ -123,7 +123,7 @@ class Editor extends Component {
 
         varibaleNames.map(name => {
 
-            const result = keywords.find(keyword => keyword.name === name);
+            const result = keywords.find(keyword => keyword.name === name) || {};
 
             variableWordsNumber += result.wordCount ? result.wordCount : 0;
 
