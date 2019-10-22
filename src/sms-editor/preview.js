@@ -41,7 +41,7 @@ const Tips = () => {
 	return (
 		<div className="preview-tips">
 			<p>
-				1.当前通道单条短信字数限制 <span className="preview-warning">{ wordsLimit }</span> 个字；超出 { wordsLimit } 个字，按 <span className="preview-warning">{ multiLimit }</span> 字一条计费；
+				1.当前通道单条短信字数限制 <span className="preview-warning">{ wordsLimit }</span> 个字；超出 { wordsLimit } 个字，均按 <span className="preview-warning">{ multiLimit }</span> 字一条计费；
 			</p>
 			<span>
 				{
@@ -54,7 +54,7 @@ const Tips = () => {
 
 // 编辑器内容预览区域
 const Content = () => {
-    
+
     const option = useContext(SmsContext);
     const { previewText } = option;
 
@@ -72,7 +72,7 @@ const Content = () => {
 }
 
 export default function SmsPreview() {
-   
+
     return (
         <div className="preview">
             <div className="preview-mock">
