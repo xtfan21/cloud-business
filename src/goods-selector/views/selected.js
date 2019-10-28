@@ -6,7 +6,7 @@ import { Title } from './cell';
 import { actionTypes } from '../reducer';
 import { sliceData, genGridConf } from '../utils';
 import { useGoodsContext } from '../context';
-import { useFirstRender } from '../hooks';
+// import { useFirstRender } from '../hooks';
 
 const GRID_NAME = 'selected-goods-table';
 
@@ -66,10 +66,10 @@ export default function GoodsSelected(props) {
 
     const [query, setQuery] = useState({ ...platShopValue, pageSize: 20, pageNum: 1 }); // 搜索条件,包含分页
 
-    const firstRender = useFirstRender(true);
+    // const firstRender = useFirstRender(true);
 
     useEffect(() => {
-        if (!firstRender)  return () => {};
+        // if (!firstRender)  return () => {};
         const { pageSize, pageNum } = query;
         const newData = sliceData(selectedGoods, pageSize, pageNum, query);
         setData(newData);
@@ -78,10 +78,10 @@ export default function GoodsSelected(props) {
         if (RcTable.get(GRID_NAME).rendered) {
             RcTable.setCheckedData(GRID_NAME, state.selectedGoods);
         }
-        return () => {};
+        // return () => {};
     }, [query, selectedGoods]);
 
-    console.log('selected render');
+    console.log('selected render', selectedGoods);
 
     function handleRemoveAll() {
         dispatch({

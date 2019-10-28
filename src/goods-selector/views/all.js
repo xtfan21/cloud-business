@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { Checkbox } from 'cloud-react';
+import { Checkbox, Message } from 'cloud-react';
 import { CellCheck } from './cell';
 import BatchAdd from './batch-add';
 import RcTable from './rc-table';
@@ -134,7 +134,10 @@ export default function GoodsAll(props) {
     }
 
     function handleAllCheck(v) {
-        dispatch({
+        if (allData.length >= limit) {
+            return Message.error('已选商品数已达上限，不能继续选择。', { duration: 0 });
+        }
+        return dispatch({
             type: actionTypes.SET_SELECTED,
             data: v ? allData : []
         });
