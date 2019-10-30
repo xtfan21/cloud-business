@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Checkbox, Message } from 'cloud-react';
 import { CellCheck } from './cell';
 import BatchAdd from './batch-add';
@@ -81,17 +81,30 @@ export default function GoodsAll(props) {
     const [query, setQuery] = useState({ ...platShopValue, pageSize: 20, pageNum: 1 }); // 搜索条件,包含分页
     const [batchVisible, setBatchVisible] = useState(false);
 
+    const mounted = useRef(false);
+
+    useEffect(() => {
+        mounted.current = true;
+        return () => {
+            mounted.current = false;
+        }
+    }, []);
+
     useEffect(() => {
         // 表格数据
         setLoading(true);
         store.fetchGoods(query, dataHandler).then(res => {
-            setData(res);
-            setLoading(false);
+            if (mounted.current) {
+                setData(res);
+                setLoading(false);
+            }
         });
 
         // 全量数据（筛选条件）
         store.fetchGoods({ ...query, pageNum: 1, pageSize: null }, dataHandler).then(res => {
-            setAllData(res.data);
+            if (mounted.current) {
+                setAllData(res.data);
+            }
         });
     }, [query]);
 
@@ -112,7 +125,7 @@ export default function GoodsAll(props) {
             }
 
             dispatch({
-                type: actionTypes.ADD_SELECTED,
+                type: actionTypes.SET_SELECTED,
                 data: rs
             });
         }
@@ -134,8 +147,15 @@ export default function GoodsAll(props) {
     }
 
     function handleAllCheck(v) {
+        const contextContainer = document.body.querySelector('.modal-body');
+        const opts = { duration: 0, contextContainer };
+
+        if (pageData.length > allData.length) {
+            return Message.error('正在获取全部商品，请稍后再点击。', opts);
+        }
+
         if (allData.length >= limit) {
-            return Message.error('已选商品数已达上限，不能继续选择。', { duration: 0 });
+            return Message.error('已选商品数已达上限，不能继续选择。', opts);
         }
         return dispatch({
             type: actionTypes.SET_SELECTED,
@@ -202,7 +222,7 @@ export default function GoodsAll(props) {
                     loading={loading}
                     onPageChange={pageChange}
                     columnData={columnData}/>
-                    <BatchAdd visible={batchVisible} onOk={ensureBatch} onClose={closeBatch}/>
+                <BatchAdd visible={batchVisible} onOk={ensureBatch} onClose={closeBatch}/>
             </div>
         </>
     );

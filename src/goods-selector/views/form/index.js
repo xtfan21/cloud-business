@@ -51,7 +51,7 @@ function genSearchConfig(params) {
     }, {
         label: '上架时间',
         field: ['startListTime', 'endListTime'],
-        type: FormItem.types.NUM_RANGE,
+        type: FormItem.types.DATE_RANGE,
         placeholder: '商品标题',
         value: []
     }, {

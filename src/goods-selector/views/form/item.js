@@ -1,7 +1,7 @@
 import React,{ useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import { Input, Select } from 'cloud-react';
+import { Input, Select, Datepicker } from 'cloud-react';
 import { platShopDropdown } from '../../utils';
 import PlatShop from './plat-shop';
 
@@ -111,7 +111,12 @@ function GoodsFormItem(props) {
 
     function renderDateRange() {
         return (
-            <div>日期选择</div>
+            <div className="goods-form-item">
+                <span className="goods-form-item-label">{label}：</span>
+                <Datepicker showToday maxDate={value[1]} value={value[0]} onChange={handleChange(0)} placeholder="年月日" />
+                -
+                <Datepicker showToday minDate={value[0]} value={value[1]} onChange={handleChange(1)} placeholder="年月日" />
+            </div>
         );
     }
 
