@@ -24,7 +24,7 @@ function GoodsTitle(props) {
 
     return (
         <Tooltip content={name}>
-            <a className={cls('table-link', className)} href={row.detailUrl} style={style}>
+            <a className={cls('table-link', className)} target="_Blank" rel="noopener noreferrer"  href={row.detailUrl} style={style}>
                 <img src={row.picUrl} alt=""/>
                 <span className="goods-title" dangerouslySetInnerHTML={{ __html: highlightElement }}></span>
             </a>
