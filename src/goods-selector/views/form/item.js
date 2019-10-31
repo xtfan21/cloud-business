@@ -110,12 +110,15 @@ function GoodsFormItem(props) {
     }
 
     function renderDateRange() {
+
+        const maxDate = value[1] ? new Date(value[1]) : undefined;
+        const minDate = value[0] ? new Date(value[0]) : undefined;
         return (
             <div className="goods-form-item">
                 <span className="goods-form-item-label">{label}：</span>
-                <Datepicker showToday maxDate={value[1]} value={value[0]} onChange={handleChange(0)} placeholder="年月日" />
+                <Datepicker style={{ width: 150 }} className="goods-item-date-range" showToday maxDate={maxDate} value={value[0]} onChange={handleChange(0)} placeholder="年月日" />
                 -
-                <Datepicker showToday minDate={value[0]} value={value[1]} onChange={handleChange(1)} placeholder="年月日" />
+                <Datepicker className="goods-item-date-range" showToday minDate={minDate} value={value[1]} onChange={handleChange(1)} placeholder="年月日" />
             </div>
         );
     }
