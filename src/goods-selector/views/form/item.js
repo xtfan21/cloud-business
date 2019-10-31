@@ -110,7 +110,6 @@ function GoodsFormItem(props) {
     }
 
     function renderDateRange() {
-
         const maxDate = value[1] ? new Date(value[1]) : undefined;
         const minDate = value[0] ? new Date(value[0]) : undefined;
         return (

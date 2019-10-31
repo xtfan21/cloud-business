@@ -86,8 +86,6 @@ export default function GoodsSelected(props) {
         return () => {};
     }, [query, selectedGoods]);
 
-    console.log('selected render', selectedGoods);
-
     function handleRemoveAll() {
         dispatch({
             type: actionTypes.CLEAR_SELECTED

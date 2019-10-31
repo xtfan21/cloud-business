@@ -31,6 +31,7 @@ function compareBetween(value, start, end) {
  * 本地资源，使用query进行前端搜索
  */
 export function filterData(data, query) {
+
     const {
         platCode,
         shopId,
@@ -54,7 +55,9 @@ export function filterData(data, query) {
 
         // 区间比较
         const { listTime, price } = d;
-        if (!compareBetween(listTime, startListTime, endListTime)) return false;
+        const startTime = (new Date(startListTime)).getTime();
+        const endTime = (new Date(endListTime)).getTime();
+        if (!compareBetween(listTime, startTime, endTime)) return false;
         if (!compareBetween(price, minPrice, maxPrice)) return false; 
 
         // 特殊比较

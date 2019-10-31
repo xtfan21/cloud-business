@@ -115,6 +115,12 @@ function GoodsForm(props) {
     }
 
     function handleSearch() {
+        const startTimes = paramsRef.current.startListTime;
+        const endTimes = paramsRef.current.endListTime;
+        if(startTimes || endTimes) {
+            paramsRef.current.startListTime = (new Date(startTimes)).getTime();
+            paramsRef.current.endListTime = (new Date(endTimes)).getTime();
+        }
         onSearch(paramsRef.current);
     }
 
@@ -129,7 +135,6 @@ function GoodsForm(props) {
         });
     }
 
-    // console.log('form render');
     return (
         <section className="goods-form">
             {searchConfig.map((item, index) => <FormItem key={item.field} index={index} onChange={handleChange} {...item}/>)}
