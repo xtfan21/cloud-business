@@ -297,6 +297,7 @@ class CustomerInfoModule extends React.Component {
         const addressValue = `${state || ''},${city || ''},${district || ''},${town || ''},${address || ''}`;
         // 原始地址名称
         const addressName = `${stateName || ''},${cityName || ''},${districtName || ''},${townName || ''},${address || ''}`;
+
         return (
             <div className={`account-info-area customer-info ${this.state.showEditBtn && 'mouse-enter'}`} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}>
                 {/* 姓名操作 */}
@@ -406,7 +407,7 @@ function OperateFullName({ type, fullName, newName, handleChange, showFullNameIn
     return (
         <span>
             <label>姓名：</label>
-            {!showFullNameInput && <span>{newName || fullName}</span>}
+            {!showFullNameInput && <span>{newName || fullName || '--'}</span>}
             {showFullNameInput && <Input className="edit-input" value={newName} hasClear onChange={(e) => handleChange(type, e)}/>}
             <OperatorIcon
                 type={type}
@@ -492,7 +493,7 @@ function OperateMobile({ type, mobile, newMobile, handleChange, showMobileInput,
     return (
         <span>
             <label>手机号：</label>
-            {!showMobileInput && <span>{newMobile || mobile}</span>}
+            {!showMobileInput && <span>{newMobile || mobile || '--'}</span>}
             {showMobileInput && <Input className="edit-input" hasClear maxLength="13" value={newMobile} onChange={(e) => handleChange(type, e)}/>}
             <OperatorIcon
                 type={type}
@@ -517,7 +518,7 @@ function OperateEmail({ type, email, newEmail, handleChange, showEmailInput, sho
     return (
         <span>
             <label>邮箱：</label>
-            {!showEmailInput && <span>{newEmail || email}</span>}
+            {!showEmailInput && <span>{newEmail || email || '--'}</span>}
             {showEmailInput && <Input className="edit-input" hasClear value={newEmail} onChange={(e) => handleChange(type, e)}/>}
             <OperatorIcon
                 type={type}
@@ -543,7 +544,7 @@ function OperateAddress({ type, value, valueName, onSelectedAddress, stateName, 
     return (
         <span>
             <label>地址：</label>
-            {!showAddressSelect && <Tooltip content={valueName.split(',') || addressTmp}><span className="address-label">{valueName.split(',') || addressTmp}</span></Tooltip>}
+            {!showAddressSelect && <Tooltip content={valueName.split(',') || addressTmp}><span className="address-label">{(valueName.split(',')) || addressTmp}</span></Tooltip> }
 
             {showAddressSelect && <AreaSelect addressValue={value} addressName={valueName} address={address} selectdArea={onSelectedAddress}/>}
              <OperatorIcon

@@ -148,9 +148,8 @@ class AreaSelect extends React.Component {
     handleInput = e => {
         this.setState({
             address: e.target.value
-        }, () => {
-            this.selectedAllArea(this.state.provinceName, this.state.province, this.state.cityName, this.state.city, this.state.districtName, this.state.district, this.state.townName, this.state.town, e.target.value);
         });
+        this.selectedAllArea(this.state.provinceName, this.state.province, this.state.cityName, this.state.city, this.state.districtName, this.state.district, this.state.townName, this.state.town, e.target.value);
     };
 
     /**
