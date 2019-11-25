@@ -119,15 +119,15 @@ class Sms extends Component {
 		
 		const { editorText, previewText, totalChars, newLineNumber, variableNumber } = data;
 
-		if (editorText) {
+		if (editorText !== undefined) {
 			this.setState({ editorText });
 		}
 
-		if (newLineNumber) {
+		if (newLineNumber !== undefined) {
 			this.setState({ newLineNumber });			
 		} 
 
-		if (variableNumber) {
+		if (variableNumber !== undefined) {
 			this.setState({ variableNumber });			
 		}
 
@@ -136,7 +136,7 @@ class Sms extends Component {
 			this.resolveUpdate();
 		}
 
-		if (totalChars) {
+		if (totalChars !== undefined) {
 			this.originalTotalChars = totalChars;
 			this.resolveUpdate();
 		}
@@ -153,7 +153,7 @@ class Sms extends Component {
 		const { unsubscribeText, customSignature } = this.state;
 
 		const gatewayTypes = [1, 3, 4, 5];
-		const gatewayLength = gatewayTypes.indexOf(gatewayType) > 0 ? signature.length : 0;
+		const gatewayLength = gatewayTypes.indexOf(gatewayType) > -1 ? signature.length : 0;
 		
 		const totals = this.originalTotalChars + gatewayLength + customSignature.length + unsubscribeText.length;
 		

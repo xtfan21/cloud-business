@@ -73,6 +73,7 @@ export default class SmsDemo extends React.Component {
 		{
 			gatewayId: 1,
 			name: 'GatewayType 1',
+			signature: "【苏泊尔】",
 			gatewayType: 1,
 		},
 		{
