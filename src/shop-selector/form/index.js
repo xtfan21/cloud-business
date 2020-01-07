@@ -1,44 +1,29 @@
 import React, { Component } from 'react';
 import { Input, Button, Select } from 'cloud-react';
-import http from '../http'
 
 import './index.less';
-
-/**
- * 获取平台数据
- * @returns {Promise<any>}
- */
-let channelList = []; // 平台列表
-let typeList = []; // 店铺类型列表
-function fetchChannelData() {
-
-	http.get('https://qa-ual.shuyun.com/ucenter-interface-service/v1/channel?tenantName=qiushi6')
-	.then(res => {
-		channelList = res.data;
-		channelList.unshift({ id: '', name: '不限' });
-
-		res.data.forEach(item => {
-			const { filter } = item;
-			if (item.id === 'offline') {
-				typeList = filter[0].values;
-				typeList = typeList.map(type => ({ id: parseInt(type.id, 10), name: type.name }));
-				typeList.unshift({ id: '', name: '不限' });
-			}
-		})
-	});
-}
-fetchChannelData();
 
 export default class shopSelectorForm extends Component {
 
 	constructor(props) {
 		super(props);
+		this.channelList = this.props.channelList;
+		this.channelList.forEach(item => {
+			const { filter } = item;
+			if (item.id === 'offline') {
+				this.typeList = filter[0].values;
+				this.typeList = this.typeList.map(type => ({ id: parseInt(type.id, 10), name: type.name }));
+				this.typeList.unshift({ id: '', name: '不限' });
+			}
+		});
+
 		this.state = {
-			shopValue: '',
-			channel: '',
-			shopType: '',
-		}
+			shopValue: undefined,
+			channel: undefined,
+			shopType: undefined,
+		};
 	}
+
 
 	/**
 	 * 店铺数据
@@ -135,8 +120,7 @@ export default class shopSelectorForm extends Component {
 		const { Option } = Select;
 
 		// 是否有平台从外部传入
-		channelList = platform ? this.filterPlatform(channelList, platform) : channelList;
-
+		this.channelList = platform ? this.filterPlatform(this.channelList, platform) : this.channelList;
 		const { channel } = this.state;
 
 		// 当平台为线下时，显示店铺类型下拉
@@ -151,6 +135,7 @@ export default class shopSelectorForm extends Component {
 			console.warn('您已配置不支持平台，但是平台参数不为空');
 		}
 
+
 		return (
 			<section className="shop-form">
 				<div className="shop-form-item" style={platformStyle}>
@@ -161,7 +146,7 @@ export default class shopSelectorForm extends Component {
 						className="shop-form-input selector-background"
 						onChange={this.handlePlatformChange}
 					>
-						{channelList.map(item => (
+						{this.channelList.map(item => (
 							<Option value={item.id} key={item.id}>
 								{item.name}
 							</Option>
@@ -178,7 +163,7 @@ export default class shopSelectorForm extends Component {
 						value={this.state.shopType}
 						onChange={this.handleTypeChange}>
 						{
-							typeList.map(item => (
+							this.typeList.map(item => (
 								<Option value={item.id} key={item.id}>
 									{item.name}
 								</Option>

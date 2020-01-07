@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Tree } from 'cloud-react';
+import PropTypes from 'prop-types';
 
 export default class OfflineTree extends Component {
 
 	selectedNode = node => {
 		this.props.onSelectTree(node);
 	};
-
 
 	render() {
 		const { treeData } = this.props;
@@ -20,3 +20,7 @@ export default class OfflineTree extends Component {
 		);
 	}
 }
+OfflineTree.proTypes = {
+	treeData: PropTypes.array,
+	onSelectTree: PropTypes.func
+};

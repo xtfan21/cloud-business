@@ -1,35 +1,34 @@
 import React, { Component } from 'react';
 import { Table, Tooltip, Checkbox } from 'cloud-react';
+import PropTypes from 'prop-types';
 import ShopSelectorForm from '../form';
-
 import store from '../store';
 import Tree from './offline-tree';
-
 
 class AllShopTable extends Component {
 
 	constructor(props) {
 		super(props);
 
-		const { searchParams, tenantId } = this.props;
+		const { searchParams, tenantId, option, channel } = this.props;
 
 		this.gridManagerName = 'shopAllGrid';
 		this.pageSize = 20;
 
 		this.firstStatus = true;
 
-		this.channel = '';
+		this.channel = channel.channelList;
+		this.shopTypeList = channel.shopTypeList;
 
-		// 店铺类型
-		this.shopTypeList = [];
-
-		this.channelList();
-
-		this.query = { ...searchParams, tenantName: tenantId };
+		this.queryData = {
+			serverName: option.serverName,
+			query: { ...searchParams, tenantName: tenantId, channel: option.platform && option.platform.toString(), permissionType: option.permissionType }
+		};
 
 		this.state = {
 			treeData: [],
-			channelType: null
+			channelType: null,
+			currentShopList: [] // 当前页店铺数据
 		};
 
 		// 所有店铺
@@ -38,17 +37,15 @@ class AllShopTable extends Component {
 		// 区域下所有店铺
 		this.reginAllShopList = [];
 
-		// 当前页店铺数据
-		this.currentShopList= [];
-
 		this.reginId = null;
 
-		this.fetchAllShopList(this.query);
+		this.fetchAllShopList(this.queryData);
 		this.fetchTreeData();
 	}
 
 	componentDidUpdate() {
 		const { selectedShops } = this.props;
+
 		if (selectedShops !== undefined) {
 			Table.setCheckedData(this.gridManagerName, selectedShops);
 		}
@@ -56,11 +53,7 @@ class AllShopTable extends Component {
 		if (document.querySelector('.all-shops-List')) {
 			Table.resetLayout(this.gridManagerName, '100%');
 		}
-	}
 
-	componentWillUnmount() {
-		Table.setCheckedData(this.gridManagerName, []);
-		this.props.onSelect({ checkedList: undefined })
 	}
 
 	/**
@@ -68,18 +61,21 @@ class AllShopTable extends Component {
 	 * @param params
 	 */
 	onSearch = (params) => {
-		const { tenantId } = this.props;
+		const { tenantId, option } = this.props;
+
+		const channelStr = !params.channel ? option.platform && option.platform.toString() : params.channel;
 
 		if (params.channel === 'offline') {
-			this.query = { ...params, tenantName: tenantId, regionId: this.reginId };
+			this.queryData.query = { ...params, tenantName: tenantId, regionId: this.reginId, channel: channelStr };
 		} else {
 			this.reginId = null;
-			this.query = { ...params, tenantName: tenantId };
+			this.queryData.query = { ...params, tenantName: tenantId, channel: channelStr };
 		}
 
 		this.updateShopList();
 
-		Table.setQuery(this.gridManagerName, this.query);
+		Table.setQuery(this.gridManagerName, this.queryData.query);
+
 	};
 
 
@@ -101,14 +97,14 @@ class AllShopTable extends Component {
 
 		this.reginId = node.id;
 
-		const { selectedShops } = this.props;
+		const { selectedShops, option } = this.props;
 
 		const query = {
-			...this.query,
+			...this.queryData.query,
 			regionId: this.reginId
 		};
 
-		store.getShopList(query).then(res => {
+		store.getShopList({ query, serverName: option.serverName }).then(res => {
 			this.reginAllShopList = res.list;
 			this.props.onSelect({
 				checkedList: selectedShops
@@ -140,7 +136,7 @@ class AllShopTable extends Component {
 	 * @param status
 	 */
 	onPageCheckedHandle = status => {
-		this.checkedList = this.updateCheckedShopData(this.currentShopList, status);
+		this.checkedList = this.updateCheckedShopData(this.state.currentShopList, status);
 
 		this.props.onSelect({
 			checkedList: this.checkedList
@@ -155,12 +151,13 @@ class AllShopTable extends Component {
 	 * @param selectedShop
 	 * @returns {Promise<*>}
 	 */
-	async getselectedShopDetail(idList) {
+	async getSelectedShopDetail(idList) {
+		const { option, tenantId } = this.props;
 		const query = {
-			tenantName: this.query.tenantName,
+			tenantName: tenantId,
 			shopIdIn: idList.toString()
 		};
-		const shopList = await store.getShopList(query);
+		const shopList = await store.getShopList({ query, serverName: option.serverName });
 		return shopList
 	}
 
@@ -171,9 +168,12 @@ class AllShopTable extends Component {
 	 * @returns {Promise<*>}
 	 */
 	ajaxData = (setting, params) => {
+		const { option } = this.props;
 		this.pageSize = params.pageSize;
-		return store.getShopList(params).then(resData => {
-			this.currentShopList = resData.list;
+		return store.getShopList({ query: params, serverName: option.serverName }).then(resData => {
+			this.setState({
+				currentShopList: resData.list
+			});
 			return resData
 		});
 	};
@@ -195,6 +195,8 @@ class AllShopTable extends Component {
 			Table.setCheckedData(this.gridManagerName, checkedList);
 		}
 	};
+
+
 
 	/**
 	 * 表格配置项
@@ -261,7 +263,7 @@ class AllShopTable extends Component {
 		if (selectedShop.length && this.firstStatus) {
 
 			// 默认显示传来的已选店铺
-			this.getselectedShopDetail(selectedShop).then(res => {
+			this.getSelectedShopDetail(selectedShop).then(res => {
 
 				// 默认tab为已选店铺并且已选有数据，数据从已选拿
 				const defaultSelected = selectedShops && selectedShops.length ? selectedShops : res.list;
@@ -269,6 +271,7 @@ class AllShopTable extends Component {
 				this.props.onSelect({
 					checkedList: defaultSelected
 				});
+
 				Table.setCheckedData(this.gridManagerName, defaultSelected);
 				this.firstStatus = false;
 			});
@@ -276,16 +279,17 @@ class AllShopTable extends Component {
 		}
 	};
 
+
 	/**
 	 * 禁用当前行选中
 	 * @param row
 	 * @returns {*}
 	 */
 	rowRenderHandler = row => {
-		const { option } = this.props;
+		const { option: { disabledRowIdList = [] } } = this.props;
 
 		// eslint-disable-next-line
-		row.gm_checkbox_disabled = option.disabledRowIdList.includes(row.id);
+		row.gm_checkbox_disabled = disabledRowIdList.includes(row.id);
 		return row;
 	};
 
@@ -297,16 +301,25 @@ class AllShopTable extends Component {
 	 */
 	updateCheckedShopData(dataList, status) {
 		const { selectedShops, option } = this.props;
-		console.log(option.disabledRowIdList, '88888888');
+		const { disabledRowIdList = [], selectedShop } = option;
+
 		let checkedList = [];
 		if (status) {
+			const newShopList = [];
+			const shopIdList = {};
+
 			// 合并数据，过滤重复项
 			const shopList = dataList.concat(selectedShops);
 
-			const newShopList = shopList.filter((item, index, self) => {
-				return index === self.findIndex(t => (t.id === item.id))
+			shopList.forEach((item) => {
+				if(!shopIdList[item.id]) {
+					newShopList.push(item);
+					shopIdList[item.id] = true;
+				}
 			});
+
 			checkedList = newShopList;
+
 		} else {
 			const data = dataList.map(item => item.id);
 
@@ -317,10 +330,16 @@ class AllShopTable extends Component {
 			checkedList = selectedShopList;
 		}
 
-		checkedList = checkedList.filter(item => option.disabledRowIdList.find(item.id));
-		console.log(checkedList, '=======');
+		// 过滤禁选中的选中项
+		const disabledShop = disabledRowIdList.filter(id => {
+			return selectedShop.indexOf(id) === -1
+		});
+
+		// 过滤禁选店铺
+		checkedList = checkedList.filter(item => disabledShop.indexOf(item.id) === -1);
 		return checkedList
 	}
+
 
 	/**
 	 * 搜索更新店铺数据
@@ -328,32 +347,14 @@ class AllShopTable extends Component {
 	 */
 	async updateShopList() {
 		// 所有店铺数据
-		await store.getShopList(this.query).then(res => {
+		await store.getShopList(this.queryData).then(res => {
 			this.allShopList = res.list;
 		});
 
-		// 当前页面数据
-		const currentPageQuery = { ...this.query, pageNum: 1, pageSize: this.pageSize };
-		await store.getShopList(currentPageQuery).then(res => {
-			this.currentShopList = res.list;
-		});
-
 		this.props.onSelect({
-			checkedList: this.props.selectedShops
-		});
-	}
-
-
-	/**
-	 * 获取平台数据
-	 * @returns {Promise<any>}
-	 */
-	async channelList() {
-		this.channel = await store.fetchChannelData();
-		this.channel.forEach(item => {
-			if (item.filter.length) {
-				this.shopTypeList = item.filter
-			}
+			checkedList: this.props.selectedShops,
+			channel: this.channel,
+			shopTypeList: this.shopTypeList
 		});
 	}
 
@@ -363,12 +364,16 @@ class AllShopTable extends Component {
 	 * @returns {Promise<T>}
 	 */
 	async fetchTreeData() {
-		const data = await store.fetchRegionTree({ tenantName: this.query.tenantName });
+		const { tenantId, option } = this.props;
+		const query = {
+			tenantName: tenantId,
+			serverName: option.serverName
+		};
+		const data = await store.fetchRegionTree(query);
 		this.setState({
 			treeData: data
 		});
 	}
-
 
 	/**
 	 * 获取所有店铺信息
@@ -383,26 +388,29 @@ class AllShopTable extends Component {
 	 * 更新选中状态
 	 */
 	updateCheckedStatus(pageData) {
-		const { selectedShops } = this.props;
+		const { selectedShops, option: { disabledRowIdList = [] } } = this.props;
 		if (selectedShops) {
-			const checkedListId = selectedShops && selectedShops.map(item => item && item.id);
-			const checkStatusList = checkedListId && pageData.map(item => checkedListId.includes(item.id));
+			// 过滤禁选店铺
+			const _pageData = pageData.filter(item => disabledRowIdList.indexOf(item.id) === -1);
 
-			this.pageStatus = checkStatusList.every(item => (item === true)) && checkStatusList.length;
+			const checkedListId = selectedShops && selectedShops.map(item => item && item.id);
+			const checkStatusList = checkedListId && _pageData.map(item => checkedListId.includes(item.id));
+
+			this.pageStatus = checkStatusList.length && !checkStatusList.includes(false);
 		}
 		return this.pageStatus;
 	};
 
 
+
 	render() {
-		const { channelType } = this.state;
+		const { channelType, currentShopList } = this.state;
 		const { option } = this.props;
 
 		const allShopData = this.reginId ? this.reginAllShopList : this.allShopList;
 		this.isAllChecked = this.updateCheckedStatus(allShopData);
 
-		this.currentPageChecked = this.updateCheckedStatus(this.currentShopList);
-
+		this.currentPageChecked = this.updateCheckedStatus(currentShopList);
 		const gridConf = {
 			textConfig: {
 				'checked-info': {
@@ -413,7 +421,7 @@ class AllShopTable extends Component {
 
 		return (
 			<div>
-				<ShopSelectorForm option={option} formFlag searchParams={this.onSearch} channel={this.onChannel}/>
+				<ShopSelectorForm option={option} formFlag searchParams={this.onSearch} channel={this.onChannel} channelList={this.channel}/>
 				<div className="all-shops-area">
 					{
 						channelType === 'offline' ? <Tree treeData={this.state.treeData} onSelectTree={this.onSelectTreeNode}/> : <></>
@@ -421,14 +429,15 @@ class AllShopTable extends Component {
 					<div className={channelType === 'offline' ? 'all-shops-List' : ''}>
 						{ !option.isSingleSelected ? <div className="all-shops-operation">
 							<Checkbox className="check-all-selected" checked={this.isAllChecked} onChange={this.onAllCheckedHandle}>全选全部</Checkbox>
-							<Checkbox className="check-page-selected" checked={this.currentPageChecked} onChange={this.onPageCheckedHandle}>全选当页</Checkbox>
+								<Checkbox className="check-page-selected" checked={this.currentPageChecked} onChange={this.onPageCheckedHandle}>全选当页
+							</Checkbox>
 						</div>: <></>
 						}
 
 						<Table
 							{...gridConf}
 							gridManagerName={this.gridManagerName}
-							query={this.query}
+							query={this.queryData.query}
 							height="calc(380px)"
 							ajaxData={this.ajaxData}
 							columnData={this.genColumnData()}
@@ -453,4 +462,28 @@ class AllShopTable extends Component {
 	}
 }
 
+AllShopTable.propTyes = {
+	option: PropTypes.shape({
+		isSingleSelected: PropTypes.bool,
+		disabledRowIdList: PropTypes.array,
+		serverName: PropTypes.string.isRequired
+	}),
+	channel: PropTypes.object,
+	tenantId: PropTypes.string.isRequired,
+	onSelect: PropTypes.func
+};
+
+AllShopTable.defaultProps = {
+	option: {
+		isSingleSelected: false,
+		disabledRowIdList: [],
+		serverName: ''
+	},
+	channel: {
+		channelList: [],
+		shopTypeList: []
+	},
+	tenantId: 'qiushi6',
+	onSelect: () => {}
+};
 export default AllShopTable;

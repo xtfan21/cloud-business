@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Table, Tooltip } from 'cloud-react';
 import ShopSelectorForm from '../form';
 import store from '../store';
@@ -25,15 +26,21 @@ export default class SelectedShopTable extends Component {
 	constructor(props) {
 		super(props);
 
+		const { channel } = this.props;
+		this.channel = channel.channelList;
+		this.shopTypeList = channel.shopTypeList;
+
+
 		this.gridManagerName = 'shopSelectedGrid';
 		this.params = null;
 		this.firstStatus = true;
 
 		this.firstLoading = true;
-		this.channelList();
+
 	}
 
 	componentDidUpdate() {
+
 		// 是否初始化渲染表格
 		if (Table.get(this.gridManagerName).rendered) {
 			Table.refreshGrid(this.gridManagerName);
@@ -42,6 +49,7 @@ export default class SelectedShopTable extends Component {
 				this.onSearch(this.params);
 			}
 		}
+
 	}
 
 	/**
@@ -149,7 +157,7 @@ export default class SelectedShopTable extends Component {
 	};
 
 	ajaxSuccess = () => {
-		const { selectedShop, isOpenSelectedTab } = this.props.option;
+		const { selectedShop, isOpenSelectedTab, serverName } = this.props.option;
 		const { selectedShops } = this.props;
 
 		if (this.firstStatus && selectedShop.length) {
@@ -157,9 +165,8 @@ export default class SelectedShopTable extends Component {
 				tenantName: this.props.tenantId,
 				shopIdIn: selectedShop.toString()
 			};
-
 			// 默认显示传来的已选店铺
-			store.getShopList(query).then(res => {
+			store.getShopList({ query, serverName }).then(res => {
 
 				// 默认tab为全部店铺，数据从全部店铺的已选中拿
 				const defaultSelected = isOpenSelectedTab ? res.list : selectedShops;
@@ -230,29 +237,12 @@ export default class SelectedShopTable extends Component {
 	};
 
 
-	/**
-	 * 获取平台数据
-	 * @returns {Promise<any>}
-	 */
-
-	async channelList() {
-		this.channel = await store.fetchChannelData();
-		this.firstLoading = false;
-
-		this.channel.forEach(item => {
-			if (item.filter.length) {
-				this.shopTypeList = item.filter
-			}
-		});
-	}
-
-
 	render(){
 		const { option } = this.props;
 
 		return (
 			<div>
-				<ShopSelectorForm option={option} formFlag={false} selectedSearchParams={this.onSearch}/>
+				<ShopSelectorForm option={option} formFlag={false} selectedSearchParams={this.onSearch} channelList={this.channel}/>
 				{ !option.isSingleSelected ? <div className="selected-operation">
 					<span className="remove" onClick={this.onRemoveAll}>移除全部</span>
 					<span className="remove remove-page" onClick={this.onRemovePage}>移除当页</span>
@@ -278,3 +268,11 @@ export default class SelectedShopTable extends Component {
 		);
 	}
 };
+
+SelectedShopTable.proTypes = {
+	selectedShops: 	PropTypes.array,
+	tenantId: PropTypes.string,
+	onChecked: PropTypes.func,
+	option: PropTypes.object
+};
+

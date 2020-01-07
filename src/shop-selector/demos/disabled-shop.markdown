@@ -1,6 +1,6 @@
 ---
-title: 单选店铺选择器
-desc: 单选
+title: 指定不可选店铺（LP3）
+desc: 传入不可选店铺Id列表
 ---
 
 ````javascript
@@ -11,15 +11,17 @@ import { Button } from 'cloud-react';
 
 let tenantId = 'qiushi6';
 let serverName = 'https://qa-ual.shuyun.com'; // https://qa-ual.shuyun.com 或者 https://ual.shuyun.com
-let selectedShop = ['jos_20199000']; // ['jos_19890202']
+let selectedShop = ['jos_128682']; // ['jos_19890202', 'offline_2018092015096', 'offline_2018092015109', 'taobao_100571094'];
+let disabledRowIdList = ['suning_6010355201', 'jos_128682', 'taobao_108243594'];
 
-const singleOption = {
-	// 添加用户平台参数platform，数组形式，['jos', 'taobao', 'offline']
-	platform: ['jos', 'taobao', 'offline'],
+let commonOptions = {
+	platform: ['jos', 'taobao', 'offline'], // 添加用户平台参数platform，数组形式，['jos', 'taobao', 'offline']
 	selectedShop,
-	isSingleSelected: true,
-	serverName
-}
+	isSingleSelected: false,
+	serverName,
+	disabledRowIdList
+};
+
 
 export default class ShopSelectorDemo extends Component {
 	constructor(props) {
@@ -56,13 +58,13 @@ export default class ShopSelectorDemo extends Component {
      render() {
         return (
             <div className="app-contain">
-            	<Button type="normal" onClick={this.onOpenShopSelector}>单选店铺选择器</Button>
+            	<Button type="normal" onClick={this.onOpenShopSelector}>指定不可选店铺</Button>
             	 <ShopSelector
             	 visible={this.state.visible}
             	 onOk={this.onOk}
             	 onClose={this.onClose}
             	 onCancel={this.onCancel}
-            	 option={singleOption}
+            	 option={commonOptions}
             	 tenantId={tenantId}
             	 />
             </div>
