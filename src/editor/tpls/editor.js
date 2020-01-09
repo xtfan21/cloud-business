@@ -33,7 +33,7 @@ class Editor extends Component {
 			document.execCommand('enableObjectResizing', false, 'false');
 			document.designMode = 'off';
         }
-        
+
         this.state = {
             tip: props.tip || '',
             invalidStringClosed: false
@@ -47,7 +47,7 @@ class Editor extends Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        
+
         if (props.tip && (props.tip !== state.tip)) {
             return {
                 tip: props.tip,
@@ -60,7 +60,7 @@ class Editor extends Component {
 	componentDidMount() {
 		this.checkEmpty();
     }
-    
+
 	handleKeyDown = event => {
 
 		if(isFirefox()) {
@@ -91,7 +91,7 @@ class Editor extends Component {
 	 * @memberof Editor
 	 */
 	onChange = event => {
-		
+
 		this.clearMozBr();
 
 		const { target } = event;
@@ -327,8 +327,8 @@ class Editor extends Component {
                         onMouseUp={this.onChange}
                         onPaste={this.handlePaste}>
                     </div>
-                    { 
-						(tip && !invalidStringClosed) && 
+                    {
+						(tip && !invalidStringClosed) &&
 						<div className="url-tips">
 							{ tip }
 							<span className="url-tips-close" onClick={this.handleCloseInvalidString}></span>

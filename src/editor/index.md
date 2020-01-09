@@ -19,6 +19,16 @@ subtitle: 内容编辑器
 | disabled | 编辑器禁止输入 | boolean | false |
 | onContentChanged | 内容发生变化的回调 | function | noop |
 
+
+#### keywords
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| type | 平台 | string |  |
+| name | editorText返回的变量替换值 | string |  |
+| text | 文本显示的text | string |  |
+| isShow | 该关键词是否显示 | boolean | true |
+| defaultValue | 预览默认显示文本 | number |  |
+
 ### onContentChanged 函数
 编辑器内容发生变化调用此函数，返回值为：
 ```js

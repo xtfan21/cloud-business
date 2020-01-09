@@ -15,30 +15,35 @@ export default class SmsDemo extends React.Component {
 			type: 'taobao',
 			name: 'QZ',
 			text: '前缀测试',
+			isShow: false,
 			defaultValue: '前缀测试'
 		},
 		{
 			type: 'taobao',
 			name: 'HZ',
 			text: '后缀测试',
+			isShow: true,
 			defaultValue: '后缀测试'
 		},
 		{
 			type: 'taobao',
 			name: 'XMTB',
 			text: '姓名淘宝',
+			isShow: true,
 			defaultValue: '西凉少女Ash'
 		},
 		{
 			type: 'taobao',
 			name: 'XMJDWMRZ',
 			text: '姓名京东无默认值',
+			isShow: true,
 			disabled: true
 		},
 		{
 			type: 'taobao',
 			name: 'DDBH',
 			text: '订单编号',
+			isShow: true,
 			defaultValue: '6666666666',
 			disabled: true
 		},
@@ -46,18 +51,21 @@ export default class SmsDemo extends React.Component {
 			type: 'taobao',
 			name: 'shortlink',
 			text: '同城关怀_2018-08-07',
+			isShow: true,
 			defaultValue: 'c.tb.cn/c.0zYeW#'
 		},
 		{
 			type: 'taobao',
 			name: 'LXDH',
 			text: '联系电话',
+			isShow: true,
 			defaultValue: '180-0000-0000'
 		},
 		{
 			type: 'taobao',
 			name: 'YBD_1',
 			text: '用不到 1',
+			isShow: true,
 			defaultValue: '用不到 1'
 		}
 	];
@@ -97,7 +105,7 @@ export default class SmsDemo extends React.Component {
 		this.state = {
 			gateway: this.gateways[0],
 			keywords: this.keywords,
-			content: '如果地区{选择器}要使用{{xxxx}}þ_enter_þþ_enter_þ后端数据, 请配置 ual 参数 œœ_[taobao]shortlink_œœ œœ_[taobao]XMTB_œœ 13456789876',
+			content: '',
 			useUnsubscribe: true,
 			unsubscribeText: '回T退定',
 			customSignature: '我是自定义的签名',
@@ -106,6 +114,13 @@ export default class SmsDemo extends React.Component {
 			text: '',
 			outerText: ''
 		}
+
+
+		setTimeout(() => {
+			this.setState({
+				content: '如果地区{选择器}要使用{{xxxx}}þ_enter_þþ_enter_þ后端数据, 请配置 ual 参数 œœ_[taobao]shortlink_œœ œœ_[taobao]XMTB_œœ 13456789876'
+			});
+		}, 0);
 
 		this.smsRef = React.createRef();
 	}

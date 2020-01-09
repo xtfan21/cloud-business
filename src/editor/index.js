@@ -47,17 +47,10 @@ class Editor extends Component {
 		this.insertKeyword = this.insertKeyword.bind(this);
 	}
 
-	static getDerivedStateFromProps(props, state) {
-
-		if (props.content !== state.content) {
-			return { content: props.content };
+	componentDidUpdate(prevProps) {
+		if (this.props.content !== prevProps.content) {
+			this.resolveContent();
 		}
-
-		return null;
-	}
-
-	componentDidMount() {
-		this.resolveContent();
 	}
 
 	resolveContent = () => {
@@ -88,8 +81,9 @@ class Editor extends Component {
 	setTotalChars = text => {
 
 		const variableReg = RegExp(`${escapeRegExp(KEYWORD_SIGN)}_(\\[[^]]+])?(.+?)_${escapeRegExp(KEYWORD_SIGN)}`, 'g');
+		const newLineReg = RegExp(NEW_LINE, 'g');
 
-		const totals = text.replace(variableReg, '').replace(`/${NEW_LINE}/g`, ' ').length;
+		const totals = text.replace(variableReg, '').replace(newLineReg, ' ').length;
 
 		this.props.onContentChanged({ totalChars: totals });
 	}
@@ -113,10 +107,10 @@ class Editor extends Component {
 		this.props.onContentChanged({ variableNumber });
 
     }
-    
+
     // 计算内容包含的变量预估字数
     setVariableWordsNumber = varibaleNames => {
-        
+
         const { keywords } = this.props;
 
         let variableWordsNumber = 0;
@@ -144,7 +138,7 @@ class Editor extends Component {
 
 		let data = text
 			.replace(inputReg, (result, $1, $2) => {
-                
+
                 // 编辑器中显示需要 text，但是给到后端解析需要使用 name 字段
                 const name = keywordTextNameConvert($2, true, keywords);
                 varibaleNames.push(name);
@@ -153,7 +147,7 @@ class Editor extends Component {
 					return `${KEYWORD_SIGN}_${name}_${KEYWORD_SIGN}`;
 				}
                 return `${KEYWORD_SIGN}_[${$1}]${name}_${KEYWORD_SIGN}`;
-                
+
 			})
 			.replace(/<[^>]+>/g, '')
 			.replace(/(&nbsp;)|(&lt;)|(&gt;)|(&amp;)/g, result => {
@@ -166,8 +160,8 @@ class Editor extends Component {
 
 		this.setState({
 			editorText: data
-        });
-        
+		});
+
 		this.props.onContentChanged({ editorText: data });
 
 		this.setTotalChars(data);
@@ -188,8 +182,8 @@ class Editor extends Component {
 			});
 
 		const content = convertContent(this.tempRef.current.textContent, isTrimSpace);
-        
-        let preview = content;	
+
+        let preview = content;
 
 		if (hasTagInPreview) {
 			// 关键字高亮, URL, 手机及固话号码下划线
@@ -214,7 +208,7 @@ class Editor extends Component {
                         });
         }
 
-        const previews = preview.split(NEW_LINE) || [];
+		const previews = preview.split(NEW_LINE) || [];
 
 		this.setState({ previewText: previews });
 
@@ -261,7 +255,7 @@ class Editor extends Component {
 				<div ref={this.tempRef} style={{ display: 'none' }}></div>
 			</>
         );
-        
+
 	}
 }
 

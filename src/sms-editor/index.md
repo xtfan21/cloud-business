@@ -32,12 +32,22 @@ subtitle: 短信编辑器
 | signature | 短信通道内置签名 | string |  |
 | gatewayType | 短信通道类型 | number |  |
 
+
+#### keywords
+| 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| type | 平台 | string |  |
+| name | editorText返回的变量替换值 | string |  |
+| text | 文本显示的text | string |  |
+| isShow | 该关键词是否显示 | boolean | true |
+| defaultValue | 预览默认显示文本 | number |  |
+
 ### 业务方获取内部数据
 
 通过`ref`去获取所需要的数据方法`getOuterData`
 
 ### 字段说明
-| 字段 | 说明 |  
+| 字段 | 说明 |
 | --- | --- |
 | editorText | 编辑器文本 |
 | previewText | 预览文本  |

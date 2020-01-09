@@ -15,12 +15,14 @@ export default class EditorDemo extends React.Component {
 		type: 'taobao',
 		name: 'XMTB',
 		text: '姓名淘宝',
+		isShow: true,
 		defaultValue: '西凉少女Ash'
 	},
 	{
 		type: 'taobao',
 		name: 'shortlink',
 		text: '同城关怀_2018-08-07',
+		isShow: false,
 		defaultValue: 'c.tb.cn/c.0zYeW#'
 	}];
 
@@ -40,7 +42,7 @@ export default class EditorDemo extends React.Component {
 	}
 
 	handleContentChange = ({editorText, previewText}) => {
-		
+
 		if (editorText) {
 			this.setState({editorText});
 		}
@@ -67,7 +69,7 @@ export default class EditorDemo extends React.Component {
 					<div className="sms-preview">
 						{
 							Array.isArray(previewText) && previewText.map(item =>
-								item.length ? 
+								item.length ?
 								<div key={Math.random()} dangerouslySetInnerHTML={{ __html: item }}></div> : <div key={Math.random()}><br/></div>
 							)
 						}

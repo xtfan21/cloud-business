@@ -46,7 +46,7 @@ class Sms extends Component {
 
     // 存储编辑器的原始内容生成的预览文本
     originalPreviewText = [];
-    
+
     // 存储编辑器原始内容的总字数
 	originalTotalChars = 0;
 
@@ -116,7 +116,7 @@ class Sms extends Component {
 	}
 
 	handleContent(data) {
-		
+
 		const { editorText, previewText, totalChars, newLineNumber, variableNumber } = data;
 
 		if (editorText !== undefined) {
@@ -124,14 +124,14 @@ class Sms extends Component {
 		}
 
 		if (newLineNumber !== undefined) {
-			this.setState({ newLineNumber });			
-		} 
-
-		if (variableNumber !== undefined) {
-			this.setState({ variableNumber });			
+			this.setState({ newLineNumber });
 		}
 
-		if (previewText) {
+		if (variableNumber !== undefined) {
+			this.setState({ variableNumber });
+		}
+
+		if (previewText !== undefined) {
 			this.originalPreviewText = previewText;
 			this.resolveUpdate();
 		}
@@ -140,8 +140,10 @@ class Sms extends Component {
 			this.originalTotalChars = totalChars;
 			this.resolveUpdate();
 		}
-
-		this.props.onContentChange(data);
+		// 只对外暴露编辑器文本值，其余均需要通过 getOuterData 去统一获取
+		if (editorText !== undefined) {
+			this.props.onContentChange({ editorText });
+		}
 	}
 
     /**
@@ -154,14 +156,14 @@ class Sms extends Component {
 
 		const gatewayTypes = [1, 3, 4, 5];
 		const gatewayLength = gatewayTypes.indexOf(gatewayType) > -1 ? signature.length : 0;
-		
+
 		const totals = this.originalTotalChars + gatewayLength + customSignature.length + unsubscribeText.length;
-		
+
 		const preview = [...this.originalPreviewText];
 
 		const previews = getContent({ preview, signature, gatewayType, unsubscribeText, customSignature });
 
-		this.setState({ 
+		this.setState({
 			previewText: previews,
 			totalChars: totals
 		});

@@ -18,7 +18,7 @@ class SmsEditor extends Component {
 	constructor(props) {
 
 		super(props);
-		
+
 		this.smsRef = createRef();
 
 		this.handleInsertText = this.handleInsertText.bind(this);
@@ -26,13 +26,13 @@ class SmsEditor extends Component {
 	}
 
 	handleContentChanged = data => {
-		
+
         const { editorText } = data;
 
 		if (editorText !== undefined ) {
-			
+
 			const hasUrl = REG_URL.test(editorText) && !REG_URL_HASH.test(editorText);
-			
+
 			this.setState({
 				tip: hasUrl ? '输入短链地址时，请在后方加上 #，以确保短链能够正常打开，如 www.shuyun.com#' : ''
 			});

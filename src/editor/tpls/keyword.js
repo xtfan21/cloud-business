@@ -59,6 +59,7 @@ const Keywords = props => {
 			<ul className={ classNames('editor-keywords-list', { 'expanded': isShowAll }) }>
 				{
 					data.map(item =>
+						item.isShow &&
 						<li role="presentation" className={classNames('editor-keywords-item', { 'disabled': item.disabled })} key={item.name} onClick={handleInsertKeyword.bind(null, item)}>
 							#{item.text}
 						</li>
