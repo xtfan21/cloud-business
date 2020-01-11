@@ -14,13 +14,15 @@ import './index.less';
 class Editor extends Component {
 
 	static propTypes = {
+		hasUrl: PropTypes.bool,
 		width: PropTypes.number,
 		height: PropTypes.number
 	};
 
 	static defaultProps = {
+		hasUrl: false,
 		width: 300,
-		height: 130,
+		height: 130
 	};
 
 	constructor(props) {
@@ -35,31 +37,20 @@ class Editor extends Component {
         }
 
         this.state = {
-            tip: props.tip || '',
-            invalidStringClosed: false
-        }
+			hasInvalidString: false,
+			isManualClosedUrlTip: false
+        };
 
 		this.contentRef = createRef();
 
 		// 对外暴露插入文本 和 变量 的方法
 		this.handleInsertText = this.handleInsertText.bind(this);
 		this.handleInsertKeyword = this.handleInsertKeyword.bind(this);
-    }
-
-    static getDerivedStateFromProps(props, state) {
-
-        if (props.tip && (props.tip !== state.tip)) {
-            return {
-                tip: props.tip,
-                invalidStringClosed: false
-            }
-        }
-        return null;
-    }
+	}
 
 	componentDidMount() {
 		this.checkEmpty();
-    }
+	}
 
 	handleKeyDown = event => {
 
@@ -70,8 +61,14 @@ class Editor extends Component {
 
 	handleCloseInvalidString = () => {
         this.setState({
-            invalidStringClosed: true
-        });
+			hasInvalidString: false
+		});
+	}
+
+	handleCloseInvalidUrl = () => {
+		this.setState({
+			isManualClosedUrlTip: true
+		})
 	}
 
 	/**
@@ -172,8 +169,7 @@ class Editor extends Component {
 
         if (hasError) {
             this.setState({
-                tip: '您的内容中含有非法字符，已进行过滤。',
-                invalidStringClosed: false
+                hasInvalidString: true
             });
         }
 
@@ -304,8 +300,8 @@ class Editor extends Component {
 
 	render() {
 
-		const { tip, invalidStringClosed } = this.state;
-		const { keywords, width, height, disabled, resultContent } = this.props;
+		const { hasInvalidString, isManualClosedUrlTip } = this.state;
+		const { keywords, width, height, disabled, resultContent, hasUrl } = this.props;
 
 		const classes = classNames('editor-content', {
 			'empty': resultContent.length === 0
@@ -328,10 +324,17 @@ class Editor extends Component {
                         onPaste={this.handlePaste}>
                     </div>
                     {
-						(tip && !invalidStringClosed) &&
+						hasInvalidString &&
 						<div className="url-tips">
-							{ tip }
+							您的内容中含有非法字符，已进行过滤。
 							<span className="url-tips-close" onClick={this.handleCloseInvalidString}></span>
+						</div>
+					}
+					{
+						(hasUrl && !isManualClosedUrlTip) &&
+						<div className="url-tips">
+							输入短链地址时，请在后方加上 #，以确保短链能够正常打开，如 www.shuyun.com#
+							<span className="url-tips-close" onClick={this.handleCloseInvalidUrl}></span>
 						</div>
 					}
 				</div>

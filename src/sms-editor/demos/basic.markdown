@@ -115,7 +115,6 @@ export default class SmsDemo extends React.Component {
 			outerText: ''
 		}
 
-
 		setTimeout(() => {
 			this.setState({
 				content: '如果地区{选择器}要使用{{xxxx}}þ_enter_þþ_enter_þ后端数据, 请配置 ual 参数 œœ_[taobao]shortlink_œœ œœ_[taobao]XMTB_œœ 13456789876'
@@ -172,9 +171,7 @@ export default class SmsDemo extends React.Component {
 	}
 
 	handleContentChange = data => {
-		this.setState({
-			content: data.editorText
-		});
+		console.log(data);
 	}
 
 	getSmsData = () => {

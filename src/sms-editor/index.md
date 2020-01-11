@@ -21,6 +21,7 @@ subtitle: 短信编辑器
 | useUnsubscribe | 是否使用回T退 | boolean | false |
 | unsubscribeText | 退订的默认文案 | string | 回T退 |
 | gateway | 短信通道类型 | object |  |
+| onContentChange | 内容发生变化的回调 | function | noop |
 
 
 #### gateway
@@ -42,8 +43,11 @@ subtitle: 短信编辑器
 | isShow | 该关键词是否显示 | boolean | true |
 | defaultValue | 预览默认显示文本 | number |  |
 
-### 业务方获取内部数据
+#### onContentChange
+短信内容发生变化的时候，会调用此回调函数，回调函数仅返回`editorText`字段，其余字段均需通过对外提供的`getOuterData`去获取。
+PS: 除了初始化的时候，不要再去设置`content`，导致光标定位产生问题。
 
+### 业务方获取内部数据
 通过`ref`去获取所需要的数据方法`getOuterData`
 
 ### 字段说明

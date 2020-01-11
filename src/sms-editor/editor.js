@@ -11,8 +11,8 @@ export const REG_URL_HASH = new RegExp(`${regUrlBase}#`);
 class SmsEditor extends Component {
 
 	state = {
-		// 编辑器内容触发的提示信息
-		tip: ''
+		// 短信是否包含url
+		hasUrl: false
 	};
 
 	constructor(props) {
@@ -27,15 +27,14 @@ class SmsEditor extends Component {
 
 	handleContentChanged = data => {
 
-        const { editorText } = data;
+		const { editorText } = data;
 
-		if (editorText !== undefined ) {
+		if (editorText !== undefined) {
 
 			const hasUrl = REG_URL.test(editorText) && !REG_URL_HASH.test(editorText);
+			// const tip = hasUrl ? '输入短链地址时，请在后方加上 #，以确保短链能够正常打开，如 www.shuyun.com#' : '';
 
-			this.setState({
-				tip: hasUrl ? '输入短链地址时，请在后方加上 #，以确保短链能够正常打开，如 www.shuyun.com#' : ''
-			});
+			this.setState({ hasUrl });
 		}
 
 		this.props.onContentChanged(data);
@@ -52,6 +51,7 @@ class SmsEditor extends Component {
 	render() {
 
 		const { content, disabled, keywords, isTrimSpace } = this.context;
+		const { hasUrl }  = this.state;
 
 		return (
             <Editor ref={this.smsRef}
@@ -59,7 +59,7 @@ class SmsEditor extends Component {
                     content={content}
                     keywords={keywords}
                     isTrimSpace={isTrimSpace}
-                    tip={this.state.tip}
+					hasUrl={hasUrl}
                     width={500}
                     height={150}
                     onContentChanged={this.handleContentChanged} />

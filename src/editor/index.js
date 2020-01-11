@@ -14,6 +14,7 @@ class Editor extends Component {
 	static propTypes = {
 		content: PropTypes.string,
 		disabled: PropTypes.bool,
+		hasUrl: PropTypes.bool,
 		isTrimSpace: PropTypes.bool,
 		hasTagInPreview: PropTypes.bool,
 		keywords: PropTypes.array,
@@ -23,6 +24,7 @@ class Editor extends Component {
 	static defaultProps = {
 		content: '',
 		disabled: false,
+		hasUrl: false,
 		isTrimSpace: false,
 		hasTagInPreview: true,
 		keywords: [],
@@ -45,6 +47,10 @@ class Editor extends Component {
 
 		this.insertText = this.insertText.bind(this);
 		this.insertKeyword = this.insertKeyword.bind(this);
+	}
+
+	componentDidMount() {
+		this.resolveContent();
 	}
 
 	componentDidUpdate(prevProps) {
@@ -216,7 +222,6 @@ class Editor extends Component {
 	};
 
 	handleContent = data => {
-
 		const text = parseHTML(data);
 
 		this.setEditorText(text);
@@ -235,21 +240,22 @@ class Editor extends Component {
 	render() {
 
 		const { resultContent, editorText, previewText } = this.state;
-		const { keywords, disabled, isTrimSpace, tip, width, height } = this.props;
+		const { keywords, disabled, isTrimSpace, hasUrl, width, height } = this.props;
 
 		return (
 			<>
-                <EditorMain ref={this.editorRef}
-                        width={width}
-                        height={height}
-                        tip={tip}
-                        resultContent={resultContent}
-                        editorText={editorText}
-                        previewText={previewText}
-                        keywords={keywords}
-                        disabled={disabled}
-                        isTrimSpace={isTrimSpace}
-                        onContentChanged={this.handleContent} />
+				<EditorMain
+					ref={this.editorRef}
+					width={width}
+					height={height}
+					hasUrl={hasUrl}
+					resultContent={resultContent}
+					editorText={editorText}
+					previewText={previewText}
+					keywords={keywords}
+					disabled={disabled}
+					isTrimSpace={isTrimSpace}
+					onContentChanged={this.handleContent} />
 
 				{/* 隐藏的节点，用于生成预览文本 */}
 				<div ref={this.tempRef} style={{ display: 'none' }}></div>
